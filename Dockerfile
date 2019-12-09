@@ -16,7 +16,7 @@ RUN apt-get update
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get install -y git ninja-build gperf \
-ccache dfu-util device-tree-compiler wget \
+ccache dfu-util wget \
 python3-pip python3-setuptools python3-tk python3-wheel file \
 make gcc gcc-multilib
 
@@ -25,6 +25,10 @@ RUN apt-get install -y gnupg software-properties-common
 RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add -
 RUN apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
 RUN apt-get update && apt-get install -y cmake
+
+### Get an updated version of devices-tree-compiler
+RUN wget https://launchpad.net/ubuntu/+archive/primary/+files/device-tree-compiler_1.4.7-3ubuntu2_amd64.deb
+RUN apt install ./device-tree-compiler_1.4.7-3ubuntu2_amd64.deb
 
 # Uncomment to add user
 RUN apt-get install -y sudo
@@ -52,13 +56,22 @@ RUN wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_V
 RUN chmod +x zephyr-sdk-${SDK_VERSION}-setup.run
 RUN ./zephyr-sdk-${SDK_VERSION}-setup.run -- -d ~/zephyr-sdk-${SDK_VERSION}
 ## Set environment variables to let the build system know where to find the toolchain programs
-RUN export ZEPHYR_TOOLCHAIN_VARIANT=zephyr
-RUN export ZEPHYR_SDK_INSTALL_DIR=~/zephy${SDK_VERSION}
+RUN echo 'export ZEPHYR_TOOLCHAIN_VARIANT=zephyr' >> ~/.bashrc
+RUN echo 'export ZEPHYR_SDK_INSTALL_DIR=~/zephyr-sdk-${SDK_VERSION}' >> ~/.bashrc
 
 
-# aws iot C sdk
+# install aws CLI version 1
+RUN pip3 install awscli --upgrade --user
 
 # Amazon FreeRTOS
 
 # git config
+
+# Uncomment to add git config
+RUN git config --global user.name "Aaron Tsui"
+RUN git config --global user.email "aaron.tsui@outlook.com"
+RUN git config --global alias.co checkout
+RUN git config --global alias.br branch
+RUN git config --global alias.ci commit
+RUN git config --global alias.st status
 
