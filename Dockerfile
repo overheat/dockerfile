@@ -16,7 +16,7 @@ RUN apt-get update
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get install -y git ninja-build gperf \
-ccache dfu-util wget \
+ccache dfu-util wget vim\
 python3-pip python3-setuptools python3-tk python3-wheel file \
 make gcc gcc-multilib
 
