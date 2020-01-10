@@ -10,7 +10,8 @@ ENV SDK_VERSION 0.10.3
 ### Install these tools
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY sources.list /etc/apt/
+# uncommet this line, if you have a faster source.
+# COPY sources.list /etc/apt/
 RUN apt-get update && apt-get -y upgrade && \
 apt-get -y install \
 gcc-7-multilib perl liberror-perl \
